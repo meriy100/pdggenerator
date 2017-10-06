@@ -1,0 +1,28 @@
+digraph G{
+Node1[shape=record label="{1: ENTRY\ }"];
+Node2[shape=record label="{2: Function\ int\ main()}"];
+Node4[shape=record label="{4: Decl\ int\ a\ =\ 0}"];
+Node5[shape=record label="{5: Decl\ int\ b\ =\ 0}"];
+Node6[shape=record label="{6: While\ b\ \<\ 10}"];
+Node8[shape=record label="{8: If\ b\ %\ 2}"];
+Node10[shape=record label="{10: Continue\ continue;}"];
+Node11[shape=record label="{11: Assign\ b\ =\ b\ +\ 1}"];
+Node12[shape=record label="{12: Assign\ a\ =\ a\ +\ 2}"];
+Node1->Node2;
+Node2->Node4;
+Node2->Node5;
+Node2->Node6;
+Node6->Node8;
+Node6->Node11;
+Node6->Node12;
+Node8->Node10;
+Node10->Node6;
+Node4->Node12 [style = dotted];
+Node5->Node6 [style = dotted];
+Node5->Node8 [style = dotted];
+Node5->Node11 [style = dotted];
+Node11->Node6 [style = dotted];
+Node11->Node8 [style = dotted];
+Node11->Node11 [style = dotted];
+Node12->Node12 [style = dotted];
+}

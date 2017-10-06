@@ -1,30 +1,99 @@
-digraph G1{
-Node1[label="START"];
-Node1->Node2 [style = dashed];
-Node2[label="Function: int main()"];
-Node1->Node2;
-Node2->Node3 [style = dashed];
-Node3[label="Decl: int a = 0"];
-Node2->Node3;
-Node3->Node4 [style = dashed];
-Node4[label="Decl: int b = 0"];
-Node2->Node4;
-Node4->Node5 [style = dashed];
-Node5[label="While: b < 10"];
-Node2->Node5;
-Node7->Node5;
-Node5->Node6 [style = dashed];
-Node6[label="If: b % 2"];
-Node5->Node6;
-Node6->Node7 [style = dashed];
-Node6->Node8 [style = dashed];
-Node7[label="continue;"];
-Node6->Node7;
-Node7->Node5 [style = dashed];
-Node8[label="Assign: b = b + 1"];
-Node5->Node8;
-Node8->Node9 [style = dashed];
-Node9[label="Assign: a = a + 2"];
-Node5->Node9;
-Node9->Node5 [style = dashed];
-}
+Python 2.7.13 (default, Apr  4 2017, 08:46:44) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 5.5.0 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object', use 'object??' for extra details.
+
+In [1]: [0;31m[0m
+[0;31mKeyboardInterrupt[0mTraceback (most recent call last)
+[0;32m/Users/meriy100/Downloads/cparser/pdggenerator/pdg_generator/main.py[0m in [0;36m<module>[0;34m()[0m
+[1;32m     22[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     23[0m     [0;32mif[0m [0mlen[0m[0;34m([0m[0msys[0m[0;34m.[0m[0margv[0m[0;34m)[0m [0;34m>[0m [0;36m1[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0;32mprint[0m [0mmainProcess[0m[0;34m([0m[0msys[0m[0;34m.[0m[0margv[0m[0;34m[[0m[0;36m1[0m[0;34m][0m[0;34m,[0m [0msys[0m[0;34m.[0m[0margv[0m[0;34m[[0m[0;36m2[0m[0;34m:[0m[0;34m][0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     25[0m     [0;32melse[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     26[0m         [0;32mprint[0m[0;34m([0m[0;34m"Please provide a filename as argument"[0m[0;34m)[0m[0;34m[0m[0m
+
+[0;32m/Users/meriy100/Downloads/cparser/pdggenerator/pdg_generator/main.py[0m in [0;36mmainProcess[0;34m(filename, optionList)[0m
+[1;32m     16[0m     [0mgraph[0m [0;34m=[0m [0mgenerate_control_graph[0m[0;34m([0m[0mfilename[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m     17[0m     [0mgetGenAndKill[0m[0;34m([0m[0mgraph[0m[0;34m)[0m[0;34m[0m[0m
+[0;32m---> 18[0;31m     [0membed[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     19[0m     [0;32mreturn[0m [0mgraph[0m[0;34m.[0m[0mprintAllControlGraphDot[0m[0;34m([0m[0;34m'G'[0m[0;34m,[0m [0mvMode[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m     20[0m [0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/terminal/embed.pyc[0m in [0;36membed[0;34m(**kwargs)[0m
+[1;32m    383[0m         frame.f_code.co_filename, frame.f_lineno), **kwargs)
+[1;32m    384[0m     shell(header=header, stack_depth=2, compile_flags=compile_flags,
+[0;32m--> 385[0;31m           _call_location_id='%s:%s' % (frame.f_code.co_filename, frame.f_lineno))
+[0m[1;32m    386[0m     [0mInteractiveShellEmbed[0m[0;34m.[0m[0mclear_instance[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    387[0m     [0;31m#restore previous instance[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/terminal/embed.pyc[0m in [0;36m__call__[0;34m(self, header, local_ns, module, dummy, stack_depth, global_ns, compile_flags, **kw)[0m
+[1;32m    226[0m         [0;31m# our call and get the original caller's namespaces.[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    227[0m         self.mainloop(local_ns, module, stack_depth=stack_depth,
+[0;32m--> 228[0;31m                       global_ns=global_ns, compile_flags=compile_flags)
+[0m[1;32m    229[0m [0;34m[0m[0m
+[1;32m    230[0m         [0mself[0m[0;34m.[0m[0mbanner2[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mold_banner2[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/terminal/embed.pyc[0m in [0;36mmainloop[0;34m(self, local_ns, module, stack_depth, display_banner, global_ns, compile_flags)[0m
+[1;32m    321[0m [0;34m[0m[0m
+[1;32m    322[0m         [0;32mwith[0m [0mself[0m[0;34m.[0m[0mbuiltin_trap[0m[0;34m,[0m [0mself[0m[0;34m.[0m[0mdisplay_trap[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 323[0;31m             [0mself[0m[0;34m.[0m[0minteract[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    324[0m [0;34m[0m[0m
+[1;32m    325[0m         [0;31m# now, purge out the local namespace of IPython's hidden variables.[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/terminal/interactiveshell.pyc[0m in [0;36minteract[0;34m(self, display_banner)[0m
+[1;32m    474[0m [0;34m[0m[0m
+[1;32m    475[0m             [0;32mtry[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 476[0;31m                 [0mcode[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mprompt_for_code[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    477[0m             [0;32mexcept[0m [0mEOFError[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    478[0m                 [0;32mif[0m [0;34m([0m[0;32mnot[0m [0mself[0m[0;34m.[0m[0mconfirm_exit[0m[0;34m)[0m[0;31m [0m[0;31m\[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/terminal/interactiveshell.pyc[0m in [0;36mprompt[0;34m()[0m
+[1;32m    226[0m                 [0mprompt_continuation[0m [0;34m=[0m [0;34m""[0m[0;34m.[0m[0mjoin[0m[0;34m([0m[0mx[0m[0;34m[[0m[0;36m1[0m[0;34m][0m [0;32mfor[0m [0mx[0m [0;32min[0m [0mself[0m[0;34m.[0m[0mprompts[0m[0;34m.[0m[0mcontinuation_prompt_tokens[0m[0;34m([0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    227[0m                 [0;32mwhile[0m [0misp[0m[0;34m.[0m[0mpush_accepts_more[0m[0;34m([0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 228[0;31m                     [0mline[0m [0;34m=[0m [0mcast_unicode_py2[0m[0;34m([0m[0minput[0m[0;34m([0m[0mprompt_text[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    229[0m                     [0misp[0m[0;34m.[0m[0mpush[0m[0;34m([0m[0mline[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    230[0m                     [0mprompt_text[0m [0;34m=[0m [0mprompt_continuation[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/utils/py3compat.pyc[0m in [0;36minput[0;34m(prompt)[0m
+[1;32m    218[0m     [0;31m# to forward requests to a frontend.[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    219[0m     [0;32mdef[0m [0minput[0m[0;34m([0m[0mprompt[0m[0;34m=[0m[0;34m''[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 220[0;31m         [0;32mreturn[0m [0mbuiltin_mod[0m[0;34m.[0m[0mraw_input[0m[0;34m([0m[0mprompt[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    221[0m [0;34m[0m[0m
+[1;32m    222[0m     [0mbuiltin_mod_name[0m [0;34m=[0m [0;34m"__builtin__"[0m[0;34m[0m[0m
+
+[0;31mKeyboardInterrupt[0m: 
+[0;31m[0m
+[0;31mKeyboardInterrupt[0mTraceback (most recent call last)
+[0;32m/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/atexit.pyc[0m in [0;36m_run_exitfuncs[0;34m()[0m
+[1;32m     22[0m         [0mfunc[0m[0;34m,[0m [0mtargs[0m[0;34m,[0m [0mkargs[0m [0;34m=[0m [0m_exithandlers[0m[0;34m.[0m[0mpop[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[1;32m     23[0m         [0;32mtry[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m             [0mfunc[0m[0;34m([0m[0;34m*[0m[0mtargs[0m[0;34m,[0m [0;34m**[0m[0mkargs[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mexcept[0m [0mSystemExit[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     26[0m             [0mexc_info[0m [0;34m=[0m [0msys[0m[0;34m.[0m[0mexc_info[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/core/interactiveshell.pyc[0m in [0;36matexit_operations[0;34m(self)[0m
+[1;32m   3229[0m [0;34m[0m[0m
+[1;32m   3230[0m         [0;31m# Clear all user namespaces to release all references cleanly.[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 3231[0;31m         [0mself[0m[0;34m.[0m[0mreset[0m[0;34m([0m[0mnew_session[0m[0;34m=[0m[0mFalse[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m   3232[0m [0;34m[0m[0m
+[1;32m   3233[0m         [0;31m# Run user hooks[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/core/interactiveshell.pyc[0m in [0;36mreset[0;34m(self, new_session)[0m
+[1;32m   1217[0m         [0;31m# Flush cached output items[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1218[0m         [0;32mif[0m [0mself[0m[0;34m.[0m[0mdisplayhook[0m[0;34m.[0m[0mdo_full_cache[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m-> 1219[0;31m             [0mself[0m[0;34m.[0m[0mdisplayhook[0m[0;34m.[0m[0mflush[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m   1220[0m [0;34m[0m[0m
+[1;32m   1221[0m         [0;31m# The main execution namespaces must be cleared very carefully,[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/site-packages/IPython/core/displayhook.pyc[0m in [0;36mflush[0;34m(self)[0m
+[1;32m    293[0m         [0;31m# IronPython blocks here forever[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    294[0m         [0;32mif[0m [0msys[0m[0;34m.[0m[0mplatform[0m [0;34m!=[0m [0;34m"cli"[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 295[0;31m             [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    296[0m [0;34m[0m[0m
+[1;32m    297[0m [0;34m[0m[0m
+
+[0;31mKeyboardInterrupt[0m: 

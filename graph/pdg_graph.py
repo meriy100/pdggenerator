@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-  
+# -*- coding: utf-8 -*-
 import sys
 
 class NodeType:
@@ -35,7 +35,7 @@ class GraphNode:
         self.kill = set()
         self.inSet = set()
         self.outSet = set()
-        
+
         #todo
 
     def __str__(self):
@@ -74,7 +74,7 @@ class GraphNode:
         code = str(self.id) + r': ' + escape(self.content)
 
         shape = 'shape=record'
-        
+
         defVar = 'def: ' + ', '.join(v.name for v in self.defVars)
         useVar = 'use: ' + ', '.join(v.name for v in self.useVars)
         genSet = 'gen: ' + ', '.join(str(n.id) for n in self.gen)
@@ -92,7 +92,25 @@ class GraphNode:
 
         label = 'label="{' + '|'.join(attrList) + '}"'
         nodeStr = nodeName + '[' + shape + ' ' + label + '];'
-        
+
+        return nodeStr
+
+    def get_json(self, vMode=False):
+        def escape(s):
+            return (s.replace('"', '\\"'))
+            # return (s.replace('\"', r'\"').replace('<', r'\<').replace('>', r'\>')
+            #          .replace(r'{', r'\{').replace(r'}', r'\}').replace(r' ', r'\ ')
+            #          .replace(r'|', r'\|'))
+
+        nodeName = "Node" + str(self.id)
+        code = escape(self.content)
+
+
+        # attrList = [code]
+
+        # label = '"'.join(attrList) + '"'
+        nodeStr = '{ "id": ' + str(self.id) + ', "nodeName": "' + nodeName + '", "sentence": "' + code + '" }'
+
         return nodeStr
 
     def get_def_list(self):
@@ -125,7 +143,7 @@ class GraphEdge:
 class ControlGraph:
     nodeList = None
     varDict = None
-    
+
     def __init__(self, _nodeList=None, _varDict=None):
         if _nodeList:
             self.nodeList = _nodeList
@@ -151,6 +169,16 @@ class ControlGraph:
             graphStr += nodeStr + '\n'
         return graphStr
 
+    def _getNodeJson(self, noEndNode=True, vMode=False):
+        graphStrs = []
+        for node in self.nodeList:
+            # 添加节点
+            if noEndNode and node.nodeType is NodeType.end:
+                continue
+            nodeStr = node.get_json(vMode)
+            graphStrs.append(nodeStr)
+        return ",\n".join(graphStrs)
+
     def _getCDEdgeDot(self):
         """ 获得所有控制依赖边的dot表示 """
         graphStr = ''
@@ -161,6 +189,14 @@ class ControlGraph:
                 edgeStr = fromName + "->" + toName + ";"
                 graphStr += edgeStr + "\n"
         return graphStr
+
+    def _getCDEdgeJson(self):
+        graphStrs = []
+        for node in self.nodeList:
+            for dependEdge in node.cDepends:
+                edgeStr = '{ "from_node_id": ' + str(dependEdge.fromNode.id) + ', "to_node_id": ' + str(dependEdge.toNode.id) + ' }'
+                graphStrs.append(edgeStr)
+        return ",\n".join(graphStrs)
 
     def _getCFEdgeDot(self):
         """ 获得所有控制流边的dot表示 """
@@ -173,15 +209,13 @@ class ControlGraph:
                 graphStr += edgeStr + "\n"
         return graphStr
 
-    def _getDDEdgeDot(self):
-        graphStr = ''
+    def _getDDEdgeJson(self):
+        graphStrs = []
         for node in self.nodeList:
             for dependEdge in node.dDepends:
-                fromName = "Node" + str(dependEdge.fromNode.id)
-                toName = "Node" + str(dependEdge.toNode.id)
-                edgeStr = fromName + "->" + toName + " [style = dotted];"
-                graphStr += edgeStr + "\n"
-        return graphStr   
+                edgeStr = '{ "from_node_id": ' + str(dependEdge.fromNode.id) + ', "to_node_id": ' + str(dependEdge.toNode.id) + ' }'
+                graphStrs.append(edgeStr)
+        return ",\n".join(graphStrs)
 
     def printCDGraphDot(self, graphName='Control_Dependence_Graph'):
         graphStr = 'digraph '+graphName+'{\n'
@@ -198,12 +232,21 @@ class ControlGraph:
         return graphStr
 
     def printAllControlGraphDot(self, graphName='Control_Graph', vMode=False):
-        graphStr = 'digraph '+graphName+'{\n'
-        graphStr += self._getNodeDot(True, vMode)
-        graphStr += self._getCDEdgeDot()
-        graphStr += self._getDDEdgeDot()
+        graphStr = '{'
+        graphStr += '"nodes": [' + self._getNodeJson(True, vMode) + "],\n"
+        graphStr += '"control Dependence": [' + self._getCDEdgeJson() + "],\n"
+        graphStr += '"Data Dependence": [' + self._getDDEdgeJson() + "],\n"
         # graphStr += self._getCFEdgeDot()
-        graphStr += "}"
+        graphStr += '}'
+        return graphStr
+
+    def printAllControlGraphJson(self, graphName='Control_Graph', vMode=False):
+        graphStr = '{'
+        graphStr += '"nodes": [\n' + self._getNodeJson(True, vMode) + "\n],\n"
+        graphStr += '"control_dependence": [\n' + self._getCDEdgeJson() + "],\n"
+        graphStr += '"data_dependence": [\n' + self._getDDEdgeJson() + "]\n"
+        # graphStr += self._getCFEdgeDot()
+        graphStr += '}'
         return graphStr
 
 

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-  
+# -*- coding: utf-8 -*-
 import sys
 sys.path.extend(['.', '..'])
 from pycparser import parse_file, c_ast, c_generator
@@ -45,7 +45,7 @@ class NodeContext(object):
     def refresh_context_last_node(self, _new_list):
         """ 将context中的最后流节点更新成新的节点列表 """
         self.last_nodes = _new_list
-        
+
     def add_context_last_node(self, _new_node):
         """ 将context中最后流节点列表添加一个新的new_node """
         self.last_nodes.append(_new_node)
@@ -84,7 +84,7 @@ class ControlVisitor(c_ast.NodeVisitor):
 
         node_tag = '' if not tag else (tag + ' ')
         self.node_cnt += 1
-        
+
         if astNode:
             node_tag += self._code_generator.visit(astNode)
 
@@ -93,7 +93,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         self.node_list.append(new_node)
 
         return new_node
-    
+
     def get_var_from_name(self, varName):
         if not varName in self.var_dict:
             return None
@@ -141,12 +141,12 @@ class ControlVisitor(c_ast.NodeVisitor):
 
         self.add_control_flow(self.node_context.last_nodes, curr_node)
         self.node_context.refresh_context_last_node([curr_node])
-        
+
         self.add_control_dependence(self.node_context.control_head, curr_node)
 
         # 将声明的变量加入符号表
         var = get_var_from_decl(node)
-        if not var.name in self.var_dict: 
+        if not var.name in self.var_dict:
             self.var_dict[var.name] = var
 
         # 更新def和use
@@ -157,7 +157,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         curr_node.add_def_var(defvar)
         if mainvar:
             curr_node.add_use_var(mainvar)
-        for var in usevarset: 
+        for var in usevarset:
             curr_node.add_use_var(var)
 
         return curr_node
@@ -169,7 +169,7 @@ class ControlVisitor(c_ast.NodeVisitor):
             流程同声明语句
         """
         curr_node = self.create_new_node("Assign", node, NodeType.assign)
-        
+
         self.add_control_flow(self.node_context.last_nodes, curr_node)
         self.node_context.refresh_context_last_node([curr_node])
 
@@ -189,7 +189,7 @@ class ControlVisitor(c_ast.NodeVisitor):
             curr_node.add_use_var(var)
 
         return curr_node
-        
+
     def visit_FuncDef(self, node):
         """ 函数声明语句
 
@@ -271,7 +271,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         return curr_node
 
     def visit_If(self, node):
-        """ if语句 
+        """ if语句
 
 
         """
@@ -285,7 +285,7 @@ class ControlVisitor(c_ast.NodeVisitor):
 
         # 创建新的上下文
         # if更新control的head和end，但是保持现有的loop的head和end
-        new_context = NodeContext(curr_node, end_node, 
+        new_context = NodeContext(curr_node, end_node,
                                   self.node_context.loop_head,
                                   self.node_context.loop_end,
                                   self.node_context.last_nodes,
@@ -303,7 +303,7 @@ class ControlVisitor(c_ast.NodeVisitor):
 
         if node.iffalse :
             # 重建当前if的context给false分支用
-            false_context = NodeContext(curr_node, end_node, 
+            false_context = NodeContext(curr_node, end_node,
                                   saved_context.loop_head,
                                   saved_context.loop_end,
                                   saved_context.last_nodes,
@@ -342,7 +342,7 @@ class ControlVisitor(c_ast.NodeVisitor):
 
         curr_node = self.create_new_node("For", node.cond, NodeType.control)
         end_node = self.create_new_node("For End", None, NodeType.end)
-        
+
         # continue target用于接收循环内的continue
         # 所有continue的控制流指向这里，再指向for的next语句
         continueTarget = self.create_new_node("Continue Target", None, NodeType.end)
@@ -408,7 +408,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         # 创建新的上下文
         # switch更新control的head和end，但是保持现有的loop的head和end
         # switch更新controltype
-        new_context = NodeContext(curr_node, end_node, 
+        new_context = NodeContext(curr_node, end_node,
                                   self.node_context.loop_head,
                                   self.node_context.loop_end,
                                   self.node_context.last_nodes,
@@ -458,7 +458,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         # 创建新的上下文
         # case更新control的head和end，但是保持现有的loop的head和end
         # case保持controltype
-        new_context = NodeContext(curr_node, end_node, 
+        new_context = NodeContext(curr_node, end_node,
                                   self.node_context.loop_head,
                                   self.node_context.loop_end,
                                   self.node_context.last_nodes,
@@ -471,7 +471,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         self.node_context = new_context
 
         hasBreak = False
-        
+
         # 递归每个stmt，
         for child in node.stmts:
             res = self.visit(child)
@@ -513,7 +513,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         # 创建新的上下文
         # case更新control的head和end，但是保持现有的loop的head和end
         # case保持controltype
-        new_context = NodeContext(curr_node, end_node, 
+        new_context = NodeContext(curr_node, end_node,
                                   self.node_context.loop_head,
                                   self.node_context.loop_end,
                                   self.node_context.last_nodes,
@@ -526,7 +526,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         self.node_context = new_context
 
         hasBreak = False
-        
+
         # 递归每个stmt，
         for child in node.stmts:
             res = self.visit(child)
@@ -544,7 +544,7 @@ class ControlVisitor(c_ast.NodeVisitor):
         return curr_node
 
 
-    # break 
+    # break
     # 自身依赖于上一级，
     def visit_Break(self, node):
         """ 处理break语句
@@ -594,7 +594,7 @@ class ControlVisitor(c_ast.NodeVisitor):
             self.add_control_flow([curr_node], self.node_context.loop_next)
         else:
             self.add_control_flow([curr_node], self.node_context.loop_head)
-        
+
         self.add_control_dependence(curr_node, self.node_context.loop_head)
         self.add_control_dependence(self.node_context.control_head, curr_node)
 
@@ -626,7 +626,7 @@ class ControlVisitor(c_ast.NodeVisitor):
 
     # return 语句
     def visit_Return(self, node):
-        
+
         curr_node = self.create_new_node(None, node, NodeType.control)
         self.add_control_flow(self.node_context.last_nodes, curr_node)
         self.add_control_dependence(self.node_context.control_head, curr_node)
@@ -640,7 +640,7 @@ def getControlGraphFromVisitor(cdsv):
     return cg
 
 def generate_control_graph_dot(filename, debugmode=False):
-    
+
     graph = generate_control_graph(filename)
 
     ret = graph.printAllControlGraphDot()
