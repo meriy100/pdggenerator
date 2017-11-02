@@ -5,6 +5,9 @@ from pycparser import parse_file, c_ast, c_generator
 from graph.pdg_graph import GraphNode, GraphEdge, ControlGraph, NodeType
 from pdg_generator.varParser import get_var_from_decl, VarVisitor
 
+from IPython import embed
+from IPython.terminal.embed import InteractiveShellEmbed
+
 class NodeContext(object):
 
     class CType(object):
@@ -82,13 +85,20 @@ class ControlVisitor(c_ast.NodeVisitor):
             如果提供了AST节点，则将以节点为根的子树转成C代码，添加到tag中
         """
 
-        node_tag = '' if not tag else (tag + ' ')
+        # node_tag = '' if not tag else (tag + ' ')
+        node_tag = ''
         self.node_cnt += 1
+        if astNode is None:
+          coord = None
+        else:
+          coord = astNode.coord
+
 
         if astNode:
             node_tag += self._code_generator.visit(astNode)
 
-        new_node = GraphNode(self.node_cnt, node_tag)
+        # embed()
+        new_node = GraphNode(self.node_cnt, node_tag, tag, coord)
         new_node.nodeType = typ
         self.node_list.append(new_node)
 
@@ -603,8 +613,7 @@ class ControlVisitor(c_ast.NodeVisitor):
     # FuncCall 语句
     def visit_FuncCall(self, node):
         """ FuncCall: [name*, args*] """
-
-        curr_node = self.create_new_node(None, node, NodeType.call)
+        curr_node = self.create_new_node('FuncCall', node, NodeType.call)
         self.add_control_flow(self.node_context.last_nodes, curr_node)
         self.node_context.refresh_context_last_node([curr_node])
 
@@ -627,7 +636,7 @@ class ControlVisitor(c_ast.NodeVisitor):
     # return 语句
     def visit_Return(self, node):
 
-        curr_node = self.create_new_node(None, node, NodeType.control)
+        curr_node = self.create_new_node('Return', node, NodeType.control)
         self.add_control_flow(self.node_context.last_nodes, curr_node)
         self.add_control_dependence(self.node_context.control_head, curr_node)
 

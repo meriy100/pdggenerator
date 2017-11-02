@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import json
 
 class NodeType:
     entry = -2
@@ -19,7 +20,7 @@ class GraphNode:
     其间存在依赖关系
     """
     # 包含属性：  id    节点代码   定义的变量  使用的    控制依赖于   数据依赖于   控制流
-    def __init__(self, id, strLine):
+    def __init__(self, id, strLine, tag="", coord=None):
         self.id = id
         self.content = strLine
         self.tokenList = []
@@ -30,6 +31,8 @@ class GraphNode:
         self.cFlow = []
         self.preControlFlow = [] #当前节点的前驱变量
         self.nodeType = NodeType.default
+        self.tag = str(tag)
+        self.coord = coord
 
         self.gen = set()
         self.kill = set()
@@ -97,7 +100,8 @@ class GraphNode:
 
     def get_json(self, vMode=False):
         def escape(s):
-            return (s.replace('"', '\\"'))
+            return(s)
+            # return (s.replace('"', '\\"'))
             # return (s.replace('\"', r'\"').replace('<', r'\<').replace('>', r'\>')
             #          .replace(r'{', r'\{').replace(r'}', r'\}').replace(r' ', r'\ ')
             #          .replace(r'|', r'\|'))
@@ -109,7 +113,16 @@ class GraphNode:
         # attrList = [code]
 
         # label = '"'.join(attrList) + '"'
-        nodeStr = '{ "id": ' + str(self.id) + ', "nodeName": "' + nodeName + '", "sentence": "' + code + '" }'
+
+        if self.coord is None:
+          position = ''
+        else:
+          line = self.coord.line
+          column = self.coord.column
+          file_path =  self.coord.file
+          position = { 'line': line, 'column': column, 'file_path': file_path }
+
+        nodeStr = json.dumps({ 'id': self.id, 'nodeName': nodeName, 'tag': self.tag, 'sentence': code, 'position': position })
 
         return nodeStr
 
